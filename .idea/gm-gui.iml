@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Yangweijie\GmGui\" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/genkgo/php-asn1" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/kingbes/libui" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/lpilp/guomi" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/ecc" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/sodium_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yangweijie/gm-helper" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/yangweijie/kingbes-libui-sdk" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
