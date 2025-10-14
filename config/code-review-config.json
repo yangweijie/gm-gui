@@ -1,0 +1,107 @@
+{
+  "security": {
+    "rules": [
+      {
+        "id": "SECURITY_CRYPTO_KEY_EXPOSURE",
+        "name": "密钥暴露检测",
+        "description": "检测代码中是否直接暴露密钥",
+        "severity": "high",
+        "patterns": [
+          "privateKey.*=.*[\"'][a-f0-9]{64}[\"']",
+          "publicKey.*=.*[\"'][a-f0-9]{128,}[\"']"
+        ]
+      },
+      {
+        "id": "SECURITY_FILE_OPERATION",
+        "name": "文件操作安全检查",
+        "description": "检测不安全的文件操作",
+        "severity": "medium",
+        "patterns": [
+          "file_get_contents\\\\(\\\\$.*\\\\)",
+          "file_put_contents\\\\(\\\\$.*\\\\)",
+          "eval\\\\(\\\\$.*\\\\)"
+        ]
+      },
+      {
+        "id": "SECURITY_ERROR_HANDLING",
+        "name": "错误处理安全检查",
+        "description": "检测不安全的错误处理",
+        "severity": "medium",
+        "patterns": [
+          "display_errors.*=.*On",
+          "error_reporting\\\\(E_ALL\\\\)"
+        ]
+      }
+    ]
+  },
+  "performance": {
+    "rules": [
+      {
+        "id": "PERFORMANCE_LARGE_FILE_PROCESSING",
+        "name": "大文件处理优化",
+        "description": "检测大文件处理优化问题",
+        "severity": "medium",
+        "patterns": [
+          "file_get_contents\\\\([^)]*\\\\)[^;]*;.*filesize\\\\(.*\\\\).*>(.*)1048576"
+        ]
+      },
+      {
+        "id": "PERFORMANCE_CRYPTO_OPERATION",
+        "name": "加密操作优化",
+        "description": "检测加密操作优化问题",
+        "severity": "medium",
+        "patterns": [
+          "encrypt.*while.*",
+          "decrypt.*while.*"
+        ]
+      }
+    ]
+  },
+  "quality": {
+    "rules": [
+      {
+        "id": "QUALITY_CODE_COMPLEXITY",
+        "name": "代码复杂度检查",
+        "description": "检测高复杂度代码",
+        "severity": "medium",
+        "patterns": [
+          "if\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*}\\\\s*else\\\\s*if\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*}\\\\s*else\\\\s*if\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*}\\\\s*else\\\\s*if\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*}",
+          "for\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*for\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*for\\\\s*\\\\([^)]*\\\\)\\\\s*{[^}]*}"
+        ]
+      },
+      {
+        "id": "QUALITY_EXCEPTION_HANDLING",
+        "name": "异常处理检查",
+        "description": "检测不完整的异常处理",
+        "severity": "medium",
+        "patterns": [
+          "try.*{[^}]*$",
+          "catch.*\\\\(.*Exception.*\\\\).*{[^}]*$"
+        ]
+      }
+    ]
+  },
+  "architecture": {
+    "rules": [
+      {
+        "id": "ARCHITECTURE_SERVICE_DEPENDENCY",
+        "name": "服务依赖检查",
+        "description": "检测服务依赖关系问题",
+        "severity": "medium",
+        "patterns": [
+          "new.*Service.*\\\\(.*new.*Service"
+        ]
+      },
+      {
+        "id": "ARCHITECTURE_LAYER_VIOLATION",
+        "name": "分层架构检查",
+        "description": "检测分层架构违规",
+        "severity": "high",
+        "patterns": [
+          "UI.*Database.*Direct.*Access",
+          "Services.*UI.*Component.*Direct.*Use"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+    "version": "1.0.0",
+    "language": "zh-CN",
+    "theme": "default",
+    "windowWidth": 1200,
+    "windowHeight": 800,
+    "rememberWindowState": true,
+    "crypto": {
+        "outputFormat": "hex",
+        "appendZeroFour": false,
+        "sm2Mode": "C1C3C2",
+        "sm4Mode": "cbc",
+        "signatureFormat": "asn1",
+        "keyStorePath": ".\/keys",
+        "defaultOutputFormat": "hex",
+        "sm2": {
+            "appendZeroFour": false,
+            "mode": "C1C3C2"
+        },
+        "sm4": {
+            "defaultMode": "cbc",
+            "autoGenerateIV": true
+        },
+        "signature": {
+            "defaultFormat": "asn1",
+            "defaultUserId": ""
+        }
+    },
+    "storage": {
+        "keyStorePath": ".\/keys",
+        "configPath": ".\/config",
+        "tempPath": ".\/temp"
+    },
+    "app": {
+        "version": "1.0.0",
+        "language": "zh-CN",
+        "theme": "default"
+    },
+    "ui": {
+        "windowWidth": 1200,
+        "windowHeight": 800,
+        "rememberWindowState": true
+    }
+}

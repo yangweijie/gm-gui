@@ -1,0 +1,38 @@
+国密加解密的基础知识
+hex
+十六进制
+0-9A-F(a-f) 2个一组字符组成。普通字符串转换为hex  bin2hex('123456')
+base64
+a-z、A-Z、0-9、+/
+
+urlSafe base64 多见于证书存储
+结尾填充=  将+/ 替换为了 -_。  所以如果你看到了一串字符串包含G-Z 以== 结尾基本上就是base64
+hex 转base64  base64_encode(hex2bin('hex'))
+
+bin binary 二进制
+var_dump 显示为乱码
+一般转换为 base64显示     base64_encode('raw')
+
+sm2 公钥和私钥
+ECC 算法  私钥是一个大整数，公钥是一个点坐标. 公钥远比私钥长。
+私钥64位长度的hex
+公钥 128位或130位hex（开头补了00）公钥可以被压缩。130->66
+lpilp/guomi  和 yangweijie/gm-helper sm2 传入的都是hex 公钥私钥.
+如果是pem 即 base64文本  需要先判断是否pkcs8 是需要转换为pkcs1的。
+https://www.ssleye.com/ssltool/pkcs.html
+有的时候java 给的证书不是pem的是pfx,p12后缀 是 pkcs12 需要转换
+https://www.ssleye.com/ssltool/jks_pkcs12.html
+der二进制证书（der|cer|crt后缀）也需要转 pem  https://www.ssleye.com/ssltool/crt_dpem.html 转成pem后再用
+https://www.ssleye.com/ssltool/cer_check.html 查看 能看到rsa 公钥，不行看
+sm3 无需证书
+
+sm4 密钥 是 16位字符串 转hex后是32位。iv是16位字符串
+
+和java sm2国密对接常见问题：
+1. 公钥私钥不对，存在格式转换，最终要正确转化为hex（pkcs1->hex,pkcs8->pkcs1->hex,der->pkcs8->hex,pkcs12->pkcs1），还有的密钥是asn1（base64的签名如果以MEU开头的，hex的话是30开头） 的需要用 gm-helper里的sm2->asn1ToHexPublic($base64) 和  sm2->asn1ToHexPrivate($base64) 转换
+2. 模式不对 c1c2c3 和c1c3c2
+3. 输出格式不对 本库输出的是 c1c2c3 java输出的是  asn1(c1x,c1y,c3,c2) （MEU 和30开头） 需要 转换  SmSignFormatRS::rs_to_asn1($str, ‘hex’)
+4. 加密输出 c1补不不04 ，解密字符串前补不补04. 有的时候java的hex开头比你多04  就需要补（130位长度）。
+5. 加密、解密、签名前的字符串未对齐，有的是bin  有的 字节数组
+6. 签名的字符串的问题，有些项目会将原始字符串哈稀后，再对哈稀值进行签名，有些对这哈稀值又进行了hex2bin操作后再签名，请双方按约定的标准确定最后签名的数据值，双方保持一致即可
+7. 签名的结果是asn1(r,s)，个别的项目签名出来的只是 r+s的字符串组合 SmSignFormatRS::asn1_to_rs($str, 'base64')

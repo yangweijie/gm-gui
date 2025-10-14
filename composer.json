@@ -1,24 +1,38 @@
 {
-    "name": "yangweijie/gm-gui",
-    "type": "project",
-    "autoload": {
-        "psr-4": {
-            "Yangweijie\\GmGui\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "yangweijie",
-            "email": "917647288@qq.com"
-        }
-    ],
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "yangweijie/gm-helper": "dev-main",
-        "yangweijie/kingbes-libui-sdk": "dev-main"
+  "name": "yangweijie/gm-gui",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Yangweijie\\GmGui\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "yangweijie",
+      "email": "917647288@qq.com"
+    }
+  ],
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "yangweijie/gm-helper": "dev-main",
+    "yangweijie/kingbes-libui-sdk": "dev-main",
+    "psr/log": "^1.0 || ^2.0 || ^3.0",
+    "ext-gmp": "*",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "pestphp/pest": "^4.1"
+  }
 }
