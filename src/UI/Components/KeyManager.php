@@ -192,6 +192,11 @@ class KeyManager extends LibuiComponent
         $this->formatCombobox->append("HEX");
         $this->formatCombobox->append("PEM");
         $this->formatCombobox->setSelected(0); // 默认选择HEX格式
+        $this->formatCombobox->onSelected(function() {
+            App::queueMain(function(){
+                $this->onFormatSelected();
+            });
+        });
         
         // 创建生成密钥按钮
         $this->generateButton = new LibuiButton("生成");
@@ -273,6 +278,9 @@ class KeyManager extends LibuiComponent
      */
     protected function onKeySelected(): void
     {
+        // 清空状态栏消息
+        $this->app->onButtonClick();
+        
         try {
             $selectedIndex = $this->keyCombobox->getSelected();
             
@@ -290,8 +298,11 @@ class KeyManager extends LibuiComponent
             // 获取密钥管理服务
             $keyService = $this->app->getKeyManagementService();
             
+            // 获取选择的格式
+            $format = $this->formatCombobox->getSelected() === 0 ? 'hex' : 'pem';
+            
             // 加载密钥对
-            $keyPair = $keyService->loadKeyPair($keyName);
+            $keyPair = $keyService->loadKeyPair($keyName, $format);
             
             // 保存当前选中的密钥对
             $this->currentKeyPair = $keyPair;
@@ -312,6 +323,20 @@ class KeyManager extends LibuiComponent
             $this->privateKeyEntry->setText("");
             $this->currentKeyPair = null;
         }
+    }
+
+    /**
+     * 密钥格式选择事件处理
+     *
+     * @return void
+     */
+    protected function onFormatSelected(): void
+    {
+        // 清空状态栏消息
+        $this->app->onButtonClick();
+        
+        // 当格式改变时，重新加载当前选中的密钥
+        $this->onKeySelected();
     }
 
     /**

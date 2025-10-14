@@ -96,7 +96,7 @@ class CryptoTabPanel extends LibuiTab
     {
         // 创建一个简单的帮助标签页，显示一些基本信息
         $helpContainer = new LibuiVBox();
-        $helpContainer->setPadded(true);
+        $helpContainer->setPadded(false);
         
         $helpGroup = new LibuiGroup("帮助信息");
         $helpGroup->setPadded(false);
@@ -111,8 +111,8 @@ class CryptoTabPanel extends LibuiTab
         $helpTextContainer->append($helpText, true);
         
         $helpGroup->append($helpTextContainer);
-        $helpContainer->append($helpGroup, true);
+        $helpContainer->append($helpGroup, false);
         
-        $this->append("帮助", $helpContainer, true);
+        $this->append("帮助", $helpContainer, false);
     }
 }
