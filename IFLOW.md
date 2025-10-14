@@ -171,6 +171,23 @@ php app.php
 - macOS 10.15+
 - 主流 Linux 发行版
 
+### PHAR 打包
+项目支持使用 humbug/box 打包为跨平台的 PHAR 文件：
+
+```bash
+# 安装依赖
+composer install
+
+# 构建 PHAR 文件
+./build-phar.sh
+```
+
+生成的 `gm-gui.phar` 文件可以在任何支持 PHP 的平台上运行：
+
+```bash
+php gm-gui.phar
+```
+
 ### 系统要求
 - 最低内存: 256MB
 - 推荐内存: 512MB 或更高

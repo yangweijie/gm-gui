@@ -23,6 +23,14 @@
       "pestphp/pest-plugin": true
     }
   },
+  "scripts": {
+    "post-install-cmd": [
+      "@php scripts/patchBase.php"
+    ],
+    "post-update-cmd": [
+      "@php scripts/patchBase.php"
+    ]
+  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
@@ -33,6 +41,7 @@
     "ext-json": "*"
   },
   "require-dev": {
+    "humbug/box": "^4.6",
     "pestphp/pest": "^4.1"
   }
 }

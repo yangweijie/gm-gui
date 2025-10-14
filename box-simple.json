@@ -1,0 +1,11 @@
+{
+  "directories": [
+    "src"
+  ],
+  "files": [
+    "app.php"
+  ],
+  "main": "app.php",
+  "output": "gm-gui.phar",
+  "stub": true
+}

@@ -3,3 +3,4 @@ composer.lock
 /.phpunit.cache/
 /.pest/
 logs
+gm-gui.phar

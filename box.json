@@ -1,0 +1,24 @@
+{
+  "chmod": "0755",
+  "directories": [
+    "src",
+    "vendor"
+  ],
+  "files": [
+    "app.php",
+    "composer.json"
+  ],
+  "exclude-dev-files": false,
+  "exclude-composer-files": false,
+  "compression": "GZ",
+  "stub": true,
+  "main": "app.php",
+  "output": "gm-gui.phar",
+  "alias": "gm-gui.phar",
+  "banner": "国密客户端 (GM GUI) - 基于 PHP 和 LibUI 的国密算法演示工具",
+  "check-requirements": false,
+  "compactors": [
+    "KevinGH\\Box\\Compactor\\Php",
+    "KevinGH\\Box\\Compactor\\Json"
+  ]
+}
