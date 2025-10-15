@@ -2,23 +2,25 @@
   "chmod": "0755",
   "directories": [
     "src",
-    "vendor"
+    "scripts",
+    "vendor/kingbes/libui/src",
+    "vendor/azjezz/psl/src",
+    "vendor/revolt/event-loop/src",
+    "vendor/symfony/process"
   ],
   "files": [
-    "app.php",
-    "composer.json"
+    "composer.json",
+    "README.md",
+    "USER_GUIDE.md",
+    "IFLOW.md",
+    "build.sh",
+    "build.bat"
   ],
-  "exclude-dev-files": false,
+  "files-bin": [
+    "vendor/kingbes/libui/lib/macos/libui.dylib",
+    "vendor/kingbes/libui/lib/windows/libui.dll",
+    "vendor/kingbes/libui/lib/linux/libui.so"
+  ],
   "exclude-composer-files": false,
-  "compression": "GZ",
-  "stub": true,
-  "main": "app.php",
-  "output": "gm-gui.phar",
-  "alias": "gm-gui.phar",
-  "banner": "国密客户端 (GM GUI) - 基于 PHP 和 LibUI 的国密算法演示工具",
-  "check-requirements": false,
-  "compactors": [
-    "KevinGH\\Box\\Compactor\\Php",
-    "KevinGH\\Box\\Compactor\\Json"
-  ]
+  "compression": "GZ"
 }

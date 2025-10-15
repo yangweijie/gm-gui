@@ -182,11 +182,19 @@ composer install
 ./build-phar.sh
 ```
 
-生成的 `gm-gui.phar` 文件可以在任何支持 PHP 的平台上运行：
+> ⚠️ **重要限制**：由于应用程序依赖于本地 GUI 库（如 libui.dylib/.so/.dll），这些库文件无法被打包到 PHAR 文件中。因此，生成的 PHAR 文件需要与相应的本地库文件一起分发才能正常运行。
 
-```bash
-php gm-gui.phar
-```
+生成的 `gm-gui.phar` 文件需要与以下文件一起分发：
+- 对于 macOS: `vendor/kingbes/libui/lib/macos/libui.dylib`
+- 对于 Linux: `vendor/kingbes/libui/lib/linux/libui.so`
+- 对于 Windows: `vendor/kingbes/libui/lib/windows/libui.dll`
+
+在目标系统上运行时，需要确保：
+1. 目标系统上安装了 PHP 8.0 或更高版本
+2. 目标系统上安装了必要的 PHP 扩展（gmp, json）
+3. 本地 GUI 库文件位于正确的位置
+
+> 注意：PHAR 文件需要图形环境支持才能运行 GUI 应用程序。在没有图形环境的服务器上运行时，可能会出现错误码 255。
 
 ### 系统要求
 - 最低内存: 256MB

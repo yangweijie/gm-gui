@@ -1,0 +1,26 @@
+{
+  "directories": [
+    "src",
+    "vendor/yangweijie/kingbes-libui-sdk/src",
+    "vendor/kingbes/libui/src",
+    "vendor/psr/log/src"
+  ],
+  "files": [
+    "app.php",
+    "vendor/autoload.php",
+    "vendor/composer/autoload_classmap.php",
+    "vendor/composer/autoload_files.php",
+    "vendor/composer/autoload_namespaces.php",
+    "vendor/composer/autoload_psr4.php",
+    "vendor/composer/autoload_real.php",
+    "vendor/composer/autoload_static.php",
+    "vendor/composer/ClassLoader.php",
+    "vendor/composer/installed.json",
+    "vendor/composer/installed.php",
+    "vendor/composer/platform_check.php"
+  ],
+  "main": "app.php",
+  "output": "gm-gui.phar",
+  "stub": true,
+  "exclude-dev-files": false
+}

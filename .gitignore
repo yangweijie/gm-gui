@@ -4,3 +4,4 @@ composer.lock
 /.pest/
 logs
 gm-gui.phar
+dist/
