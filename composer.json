@@ -34,11 +34,12 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
+    "ext-gmp": "*",
+    "ext-json": "*",
+    "psr/log": "^1.0 || ^2.0 || ^3.0",
     "yangweijie/gm-helper": "dev-main",
     "yangweijie/kingbes-libui-sdk": "dev-main",
-    "psr/log": "^1.0 || ^2.0 || ^3.0",
-    "ext-gmp": "*",
-    "ext-json": "*"
+    "yangweijie/sm4-gcm": "dev-main"
   },
   "require-dev": {
     "humbug/box": "^4.6",
