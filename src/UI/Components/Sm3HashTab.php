@@ -250,12 +250,12 @@ class Sm3HashTab extends LibuiComponent
         $buttonResultContainer->append($this->compareResultLabel, false);
         
         // 添加多行文本框和按钮/结果容器到水平布局
-        $compareHBoxLayout->append($this->compareHashEntry, false); // 多行文本框可扩展
-        $compareHBoxLayout->append($buttonResultContainer, true); // 按钮/结果容器不扩展
+        $compareHBoxLayout->append($this->compareHashEntry, true); // 多行文本框可扩展
+        $compareHBoxLayout->append($buttonResultContainer, false); // 按钮/结果容器不扩展
         
         $compareContainer->append($compareHBoxLayout, true); // 水平布局可扩展
         
-        $compareGroup->append($compareContainer);
+        $compareGroup->append($compareContainer, true);
         $container->append($compareGroup, true);
     }
 
