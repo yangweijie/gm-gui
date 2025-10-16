@@ -68,18 +68,19 @@ class Validator
      *
      * @param string $iv 初始化向量
      * @param string $format IV格式
+     * @param int $length 期望的长度（字节）
      * @return bool 是否有效
      */
-    public static function validateIvLength(string $iv, string $format = 'hex'): bool
+    public static function validateIvLength(string $iv, string $format = 'hex', int $length = 16): bool
     {
         switch ($format) {
             case 'hex':
-                // IV通常为16字节（32个十六进制字符）
-                return strlen($iv) === 32 && ctype_xdigit($iv);
+                // IV为指定字节长度（十六进制字符数为字节长度的2倍）
+                return strlen($iv) === ($length * 2) && ctype_xdigit($iv);
             case 'base64':
-                // Base64编码的16字节数据
+                // Base64编码的数据
                 $decoded = base64_decode($iv, true);
-                return $decoded !== false && strlen($decoded) === 16;
+                return $decoded !== false && strlen($decoded) === $length;
             default:
                 return false;
         }

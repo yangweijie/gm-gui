@@ -132,7 +132,7 @@ class Sm4MainTab extends LibuiComponent
         // IV输入
         $this->ivEntry = new LibuiEntry();
         $this->ivEntry->setText(""); // 初始为空
-        $form->append("IV (16个字符, 除ecb外都需要):", $this->ivEntry, true);
+        $form->append("IV (16个字符, 除ecb外都需要, gcm模式为12个字符):", $this->ivEntry, true);
         
         $keyIvGroup->append($form,true);
         $container->append($keyIvGroup, false);
@@ -162,6 +162,7 @@ class Sm4MainTab extends LibuiComponent
         $this->modeCombobox->append("CFB");
         $this->modeCombobox->append("OFB");
         $this->modeCombobox->append("CTR");
+        $this->modeCombobox->append("GCM");
         $this->modeCombobox->setSelected(1); // 默认选择CBC
         $optionsContainer->append($this->modeCombobox, false);
         
@@ -231,7 +232,7 @@ class Sm4MainTab extends LibuiComponent
     public function getMode(): string
     {
         // 获取加密模式
-        $modes = ['sm4-ecb', 'sm4-cbc', 'sm4-cfb', 'sm4-ofb', 'sm4-ctr'];
+        $modes = ['sm4-ecb', 'sm4-cbc', 'sm4-cfb', 'sm4-ofb', 'sm4-ctr', 'sm4-gcm'];
         $selectedMode = $this->modeCombobox->getSelected();
         return $modes[$selectedMode] ?? 'sm4-cbc';
     }

@@ -213,15 +213,17 @@ class Sm4DecryptTab extends LibuiComponent
             
             // 如果不是ECB模式，则需要IV
             $isEcb = $options['mode'] === 'sm4-ecb';
+            $isGcm = $options['mode'] === 'sm4-gcm';
             if (!$isEcb) {
                 if (empty($iv)) {
-                    $this->app->showError("在CBC/CFB/OFB/CTR模式下，IV不能为空");
+                    $this->app->showError("在CBC/CFB/OFB/CTR/GCM模式下，IV不能为空");
                     return;
                 }
                 
-                // 验证IV长度
-                if (strlen($iv) !== 16) {
-                    $this->app->showError("IV必须是16个字符");
+                // 验证IV长度（GCM模式需要12字节，其他模式需要16字节）
+                $requiredIvLength = $isGcm ? 12 : 16;
+                if (strlen($iv) !== $requiredIvLength) {
+                    $this->app->showError($isGcm ? "GCM模式下IV必须是12个字符" : "IV必须是16个字符");
                     return;
                 }
                 
