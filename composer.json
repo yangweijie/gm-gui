@@ -43,6 +43,6 @@
   },
   "require-dev": {
     "humbug/box": "^4.6",
-    "pestphp/pest": "*"
+    "pestphp/pest": "^4.1"
   }
 }
