@@ -8,6 +8,7 @@ use Yangweijie\GmGui\Models\CryptoResult;
 use Yangweijie\GmGui\Utils\Validator;
 use Yangweijie\GmGui\Exceptions\CryptoException;
 use Rtgm\sm\RtSm4;
+use yangweijie\SM4GCM\SM4GCM;
 
 class Sm4Service implements CryptoServiceInterface
 {
@@ -17,6 +18,13 @@ class Sm4Service implements CryptoServiceInterface
      * @var RtSm4|null
      */
     protected ?RtSm4 $sm4 = null;
+
+    /**
+     * SM4 GCM 加密算法实例
+     *
+     * @var SM4GCM|null
+     */
+    protected ?SM4GCM $sm4Gcm = null;
 
     /**
      * 加密密钥
@@ -182,6 +190,180 @@ class Sm4Service implements CryptoServiceInterface
             $result->data = $decrypted;
             $result->format = 'raw';
             $result->executionTime = microtime(true) - $startTime;
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->executionTime = microtime(true) - $startTime;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * SM4 GCM模式加密数据
+     *
+     * @param string $data 要加密的数据
+     * @param array $options 加密选项
+     * @return CryptoResult 加密结果
+     */
+    public function encryptGcm(string $data, array $options = []): CryptoResult
+    {
+        $startTime = microtime(true);
+        $result = new CryptoResult();
+        
+        try {
+            // 验证输入
+            if (!Validator::validateNotEmpty($data)) {
+                throw CryptoException::inputValidationError("数据不能为空");
+            }
+            
+            // 验证密钥是否已设置
+            if (empty($this->key)) {
+                throw CryptoException::keyError("未设置加密密钥");
+            }
+            
+            // 验证密钥长度
+            $keyBytes = hex2bin($this->key);
+            if (strlen($keyBytes) !== 16) {
+                throw CryptoException::keyError("密钥长度不正确，应为16字节");
+            }
+            
+            // 获取选项参数
+            $iv = $options['iv'] ?? '';
+            $aad = $options['aad'] ?? '';
+            $outFormat = $options['outputFormat'] ?? 'hex';
+            
+            // 验证输出格式
+            if (!in_array($outFormat, ['hex', 'base64', 'raw'])) {
+                throw CryptoException::inputValidationError("不支持的输出格式: {$outFormat}");
+            }
+            
+            // 验证IV
+            if (empty($iv)) {
+                throw CryptoException::inputValidationError("IV不能为空");
+            }
+            
+            $ivBytes = hex2bin($iv);
+            if (strlen($ivBytes) !== 12) {
+                throw CryptoException::inputValidationError("IV长度不正确，应为12字节");
+            }
+            
+            // 创建SM4GCM实例
+            $this->sm4Gcm = new SM4GCM($keyBytes, $ivBytes);
+            
+            // 执行加密
+            $encrypted = $this->sm4Gcm->encrypt($data, $aad);
+            
+            // 根据输出格式转换结果
+            if ($outFormat === 'hex') {
+                $encrypted = bin2hex($encrypted);
+            } elseif ($outFormat === 'base64') {
+                $encrypted = base64_encode($encrypted);
+            }
+            
+            // 设置结果
+            $result->success = true;
+            $result->data = $encrypted;
+            $result->format = $outFormat;
+            $result->executionTime = microtime(true) - $startTime;
+            
+            // 添加元数据
+            $result->metadata['iv'] = $iv;
+            $result->metadata['mode'] = 'sm4-gcm';
+            if (!empty($aad)) {
+                $result->metadata['aad'] = $aad;
+                $result->metadata['withAad'] = true;
+            } else {
+                $result->metadata['withAad'] = false;
+            }
+            
+        } catch (Exception $e) {
+            $result->success = false;
+            $result->error = $e->getMessage();
+            $result->executionTime = microtime(true) - $startTime;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * SM4 GCM模式解密数据
+     *
+     * @param string $data 要解密的数据
+     * @param array $options 解密选项
+     * @return CryptoResult 解密结果
+     */
+    public function decryptGcm(string $data, array $options = []): CryptoResult
+    {
+        $startTime = microtime(true);
+        $result = new CryptoResult();
+        
+        try {
+            // 验证输入
+            if (!Validator::validateNotEmpty($data)) {
+                throw CryptoException::inputValidationError("数据不能为空");
+            }
+            
+            // 验证密钥是否已设置
+            if (empty($this->key)) {
+                throw CryptoException::keyError("未设置解密密钥");
+            }
+            
+            // 验证密钥长度
+            $keyBytes = hex2bin($this->key);
+            if (strlen($keyBytes) !== 16) {
+                throw CryptoException::keyError("密钥长度不正确，应为16字节");
+            }
+            
+            // 获取选项参数
+            $iv = $options['iv'] ?? '';
+            $aad = $options['aad'] ?? '';
+            $inputFormat = $options['inputFormat'] ?? 'hex';
+            
+            // 验证输入格式
+            if (!in_array($inputFormat, ['hex', 'base64', 'raw'])) {
+                throw CryptoException::inputValidationError("不支持的输入格式: {$inputFormat}");
+            }
+            
+            // 根据输入格式转换数据
+            if ($inputFormat === 'hex') {
+                $data = hex2bin($data);
+            } elseif ($inputFormat === 'base64') {
+                $data = base64_decode($data);
+            }
+            
+            // 验证IV
+            if (empty($iv)) {
+                throw CryptoException::inputValidationError("IV不能为空");
+            }
+            
+            $ivBytes = hex2bin($iv);
+            if (strlen($ivBytes) !== 12) {
+                throw CryptoException::inputValidationError("IV长度不正确，应为12字节");
+            }
+            
+            // 创建SM4GCM实例
+            $this->sm4Gcm = new SM4GCM($keyBytes, $ivBytes);
+            
+            // 执行解密
+            $decrypted = $this->sm4Gcm->decrypt($data, $aad);
+            
+            // 设置结果
+            $result->success = true;
+            $result->data = $decrypted;
+            $result->format = 'raw';
+            $result->executionTime = microtime(true) - $startTime;
+            
+            // 添加元数据
+            $result->metadata['iv'] = $iv;
+            $result->metadata['mode'] = 'sm4-gcm';
+            if (!empty($aad)) {
+                $result->metadata['aad'] = $aad;
+                $result->metadata['withAad'] = true;
+            } else {
+                $result->metadata['withAad'] = false;
+            }
             
         } catch (Exception $e) {
             $result->success = false;

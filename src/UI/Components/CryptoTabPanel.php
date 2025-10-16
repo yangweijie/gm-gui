@@ -48,6 +48,9 @@ class CryptoTabPanel extends LibuiTab
         // 添加 SM4 对称加密选项卡
         $this->addSm4EncryptTab();
         
+        // 添加 SM4 GCM 对称加密选项卡
+        $this->addSm4GcmEncryptTab();
+        
         // 添加帮助选项卡
         $this->addHelpTab();
     }
@@ -74,6 +77,17 @@ class CryptoTabPanel extends LibuiTab
     {
         $sm4MainTab = new Sm4MainTab($this->app);
         $this->append("SM4 对称加密", $sm4MainTab, false);
+    }
+
+    /**
+     * 添加 SM4 GCM 对称加密选项卡
+     *
+     * @return void
+     */
+    protected function addSm4GcmEncryptTab(): void
+    {
+        $sm4GcmMainTab = new Sm4GcmMainTab($this->app);
+        $this->append("SM4 GCM", $sm4GcmMainTab, false);
     }
 
     /**
@@ -110,8 +124,8 @@ class CryptoTabPanel extends LibuiTab
         $helpText->setReadOnly(true);
         $helpTextContainer->append($helpText, true);
         
-        $helpGroup->append($helpTextContainer);
-        $helpContainer->append($helpGroup, false);
+        $helpGroup->append($helpTextContainer, true);
+        $helpContainer->append($helpGroup, true);
         
         $this->append("帮助", $helpContainer, false);
     }
