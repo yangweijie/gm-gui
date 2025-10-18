@@ -16,6 +16,7 @@ use FFI\CData;
 use Kingbes\Libui\Box;
 use Kingbes\Libui\Window;
 use Yangweijie\GmGui\Application\SmCryptoApp;
+use Yangweijie\GmGui\UI\Dialogs\CodeDownloadDialog;
 
 class Sm4DecryptTab extends LibuiComponent
 {
@@ -237,6 +238,16 @@ class Sm4DecryptTab extends LibuiComponent
             // 显示结果
             if ($result->success) {
                 $this->resultDisplay->setResult($result->data);
+                
+                // 生成代码示例
+                $code = $this->app->getCodeGenerationService()->generateSm4DecryptCode(
+                    $ciphertext,
+                    $key,
+                    $options
+                );
+                
+                // 显示代码下载对话框
+                $this->showCodeDownloadDialog($code);
             } else {
                 $this->app->showError("解密失败: " . $result->error);
             }
@@ -298,6 +309,79 @@ class Sm4DecryptTab extends LibuiComponent
             }
         }
         return null;
+    }
+
+    /**
+     * 显示代码下载对话框
+     *
+     * @param string $code 生成的代码
+     * @return void
+     */
+    protected function showCodeDownloadDialog(string $code): void
+    {
+        $dialog = new CodeDownloadDialog(
+            $this->app,
+            "功能代码下载",
+            "操作已完成。是否需要下载实现此功能的PHP代码示例？",
+            $code
+        );
+        
+        $dialog->onDownload(function($code, $dialog) {
+            // 处理下载代码的逻辑
+            $this->handleCodeDownload($code);
+        });
+        
+        $dialog->onCancel(function() {
+            // 用户取消操作，无需处理
+        });
+        
+        $dialog->show();
+    }
+
+    /**
+     * 处理代码下载
+     *
+     * @param string $code 生成的代码
+     * @return void
+     */
+    protected function handleCodeDownload(string $code): void
+    {
+        // 将代码复制到剪贴板
+        if ($this->app->getUiApp()->copyToClipboard($code)) {
+            // 获取主窗口句柄
+            $mainWindow = $this->app->getIntegrationManager()->getMainWindow();
+            
+            // 询问用户是否要保存到文件
+            Window::msgBox(
+                $mainWindow->getHandle(),
+                "代码已复制",
+                "代码已复制到剪贴板。是否要将代码保存到文件？\n\n点击确定保存文件，点击取消仅复制到剪贴板。"
+            );
+            
+            // 打开文件保存对话框
+            $filePath = Window::saveFile($mainWindow->getHandle());
+            
+            if (!empty($filePath)) {
+                // 确保文件有.php扩展名
+                if (pathinfo($filePath, PATHINFO_EXTENSION) !== 'php') {
+                    $filePath .= '.php';
+                }
+                
+                // 保存文件
+                if (file_put_contents($filePath, $code)) {
+                    Window::msgBox(
+                        $mainWindow->getHandle(),
+                        "保存成功",
+                        "代码已成功保存到: " . $filePath
+                    );
+                } else {
+                    $this->app->showError("保存文件失败: " . $filePath);
+                }
+            }
+        } else {
+            // 显示错误消息
+            $this->app->showError("复制代码到剪贴板失败");
+        }
     }
 
     /**

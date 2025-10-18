@@ -12,6 +12,7 @@ use Yangweijie\GmGui\Services\KeyManagementService;
 use Yangweijie\GmGui\Services\FileService;
 use Yangweijie\GmGui\Services\FileDragDropService;
 use Yangweijie\GmGui\Services\ConfigService;
+use Yangweijie\GmGui\Services\CodeGenerationService;
 use Yangweijie\GmGui\UI\MainWindow;
 
 /**
@@ -31,6 +32,7 @@ class SmCryptoApp
     private FileService $fileService;
     private FileDragDropService $fileDragDropService;
     private ConfigService $configService;
+    private CodeGenerationService $codeGenerationService;
 
     // 集成管理器
     private AppIntegrationManager $integrationManager;
@@ -80,6 +82,7 @@ class SmCryptoApp
         $this->keyManagementService = new KeyManagementService();
         $this->fileService = new FileService();
         $this->fileDragDropService = new FileDragDropService();
+        $this->codeGenerationService = new CodeGenerationService();
     }
 
     /**
@@ -160,6 +163,16 @@ class SmCryptoApp
     public function getConfigService(): ConfigService
     {
         return $this->configService;
+    }
+
+    /**
+     * 获取代码生成服务
+     *
+     * @return CodeGenerationService
+     */
+    public function getCodeGenerationService(): CodeGenerationService
+    {
+        return $this->codeGenerationService;
     }
 
     /**
