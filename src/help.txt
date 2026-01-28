@@ -20,6 +20,7 @@ ECC 算法  私钥是一个大整数，公钥是一个点坐标. 公钥远比私
 lpilp/guomi  和 yangweijie/gm-helper sm2 传入的都是hex 公钥私钥.
 如果是pem 即 base64文本  需要先判断是否pkcs8 是需要转换为pkcs1的。
 https://www.ssleye.com/ssltool/pkcs.html
+如果提示pem格式不对，可以用 Sm2PrivateKeyParserUtils::extractPrivateKeyFromPkcs8 提取hex私钥, 公钥可以 Sm2PublicKeyParserUtil::extractPublicKeyHex提取hex 公钥
 有的时候java 给的证书不是pem的是pfx,p12后缀 是 pkcs12 需要转换
 https://www.ssleye.com/ssltool/jks_pkcs12.html
 der二进制证书（der|cer|crt后缀）也需要转 pem  https://www.ssleye.com/ssltool/crt_dpem.html 转成pem后再用

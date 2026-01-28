@@ -2,6 +2,7 @@
 
 namespace Yangweijie\GmGui\Services;
 
+use Exception;
 use Yangweijie\GmGui\Interfaces\FileServiceInterface;
 use Yangweijie\GmGui\Utils\FileHelper;
 use Yangweijie\GmGui\Exceptions\CryptoException;
@@ -19,7 +20,7 @@ class FileService implements FileServiceInterface
     {
         try {
             return FileHelper::readFile($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("读取文件失败: " . $e->getMessage());
         }
     }
@@ -36,7 +37,7 @@ class FileService implements FileServiceInterface
     {
         try {
             return FileHelper::writeFile($path, $content);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("写入文件失败: " . $e->getMessage());
         }
     }
@@ -91,31 +92,31 @@ class FileService implements FileServiceInterface
     {
         try {
             if (!file_exists($source)) {
-                throw new \Exception("源文件不存在: {$source}");
+                throw new Exception("源文件不存在: {$source}");
             }
             
             if (!is_readable($source)) {
-                throw new \Exception("源文件不可读: {$source}");
+                throw new Exception("源文件不可读: {$source}");
             }
             
             $content = file_get_contents($source);
             if ($content === false) {
-                throw new \Exception("读取源文件失败: {$source}");
+                throw new Exception("读取源文件失败: {$source}");
             }
             
             $directory = dirname($destination);
             if (!is_dir($directory)) {
                 if (!mkdir($directory, 0755, true)) {
-                    throw new \Exception("创建目录失败: {$directory}");
+                    throw new Exception("创建目录失败: {$directory}");
                 }
             }
             
             if (file_put_contents($destination, $content) === false) {
-                throw new \Exception("写入目标文件失败: {$destination}");
+                throw new Exception("写入目标文件失败: {$destination}");
             }
             
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("复制文件失败: " . $e->getMessage());
         }
     }
@@ -132,18 +133,18 @@ class FileService implements FileServiceInterface
     {
         try {
             if (!file_exists($source)) {
-                throw new \Exception("源文件不存在: {$source}");
+                throw new Exception("源文件不存在: {$source}");
             }
             
             $directory = dirname($destination);
             if (!is_dir($directory)) {
                 if (!mkdir($directory, 0755, true)) {
-                    throw new \Exception("创建目录失败: {$directory}");
+                    throw new Exception("创建目录失败: {$directory}");
                 }
             }
             
             return rename($source, $destination);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("移动文件失败: " . $e->getMessage());
         }
     }
@@ -163,7 +164,7 @@ class FileService implements FileServiceInterface
             }
             
             return FileHelper::secureDelete($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("删除文件失败: " . $e->getMessage());
         }
     }
@@ -179,11 +180,11 @@ class FileService implements FileServiceInterface
     {
         try {
             if (!file_exists($path)) {
-                throw new \Exception("文件不存在: {$path}");
+                throw new Exception("文件不存在: {$path}");
             }
             
             return filesize($path);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("获取文件大小失败: " . $e->getMessage());
         }
     }
@@ -236,18 +237,18 @@ class FileService implements FileServiceInterface
             $tempFile = tempnam($tempDir, $prefix);
             
             if ($tempFile === false) {
-                throw new \Exception("创建临时文件失败");
+                throw new Exception("创建临时文件失败");
             }
             
             if (!empty($content)) {
                 if (file_put_contents($tempFile, $content) === false) {
                     unlink($tempFile);
-                    throw new \Exception("写入临时文件失败");
+                    throw new Exception("写入临时文件失败");
                 }
             }
             
             return $tempFile;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("创建临时文件失败: " . $e->getMessage());
         }
     }
@@ -265,12 +266,12 @@ class FileService implements FileServiceInterface
     {
         try {
             if (!file_exists($path)) {
-                throw new \Exception("文件不存在: {$path}");
+                throw new Exception("文件不存在: {$path}");
             }
             
             $handle = fopen($path, 'rb');
             if ($handle === false) {
-                throw new \Exception("打开文件失败: {$path}");
+                throw new Exception("打开文件失败: {$path}");
             }
             
             $chunkIndex = 0;
@@ -283,7 +284,7 @@ class FileService implements FileServiceInterface
             }
             
             fclose($handle);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("分块读取文件失败: " . $e->getMessage());
         }
     }

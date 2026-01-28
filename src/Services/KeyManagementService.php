@@ -2,6 +2,7 @@
 
 namespace Yangweijie\GmGui\Services;
 
+use Exception;
 use Yangweijie\GmGui\Interfaces\KeyManagementInterface;
 use Yangweijie\GmGui\Models\KeyPair;
 use Yangweijie\GmGui\Utils\FileHelper;
@@ -46,6 +47,7 @@ class KeyManagementService implements KeyManagementInterface
      * 生成密钥对
      *
      * @return KeyPair 生成的密钥对
+     * @throws CryptoException
      */
     public function generateKeyPair(): KeyPair
     {
@@ -62,7 +64,7 @@ class KeyManagementService implements KeyManagementInterface
             );
             
             return $result;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::keyError("生成密钥对失败: " . $e->getMessage());
         }
     }
@@ -73,6 +75,7 @@ class KeyManagementService implements KeyManagementInterface
      * @param string $keyData 密钥数据
      * @param string $format 密钥格式
      * @return KeyPair 导入的密钥对
+     * @throws CryptoException
      */
     public function importKey(string $keyData, string $format = 'hex'): KeyPair
     {
@@ -146,7 +149,7 @@ class KeyManagementService implements KeyManagementInterface
             return $keyPair;
         } catch (CryptoException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::keyError("导入密钥失败: " . $e->getMessage());
         }
     }
@@ -186,7 +189,7 @@ class KeyManagementService implements KeyManagementInterface
             
             // 保存密钥对
             return $this->saveKeyPair($keyPair, $filename, $format);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::keyError("从文件导入密钥失败: " . $e->getMessage());
         }
     }
@@ -228,7 +231,7 @@ class KeyManagementService implements KeyManagementInterface
             throw CryptoException::keyError("密钥数据为空");
         } catch (CryptoException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::keyError("导出密钥失败: " . $e->getMessage());
         }
     }
@@ -245,7 +248,7 @@ class KeyManagementService implements KeyManagementInterface
         try {
             $keyPair = $this->importKey($keyData, $format);
             return !empty($keyPair->publicKey) || !empty($keyPair->privateKey);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -257,6 +260,7 @@ class KeyManagementService implements KeyManagementInterface
      * @param string $fromFormat 源格式
      * @param string $toFormat 目标格式
      * @return string 转换后的密钥数据
+     * @throws CryptoException
      */
     public function convertKeyFormat(string $keyData, string $fromFormat, string $toFormat): string
     {
@@ -266,7 +270,7 @@ class KeyManagementService implements KeyManagementInterface
             
             // 导出为目标格式
             return $this->exportKey($keyPair, $toFormat);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::keyError("转换密钥格式失败: " . $e->getMessage());
         }
     }
@@ -278,6 +282,7 @@ class KeyManagementService implements KeyManagementInterface
      * @param string $filename 文件名或完整路径
      * @param string $format 存储格式
      * @return bool 是否保存成功
+     * @throws CryptoException
      */
     public function saveKeyPair(KeyPair $keyPair, string $filename, string $format = 'hex'): bool
     {
@@ -303,7 +308,7 @@ class KeyManagementService implements KeyManagementInterface
             
             // 保存到文件
             return FileHelper::writeFile($filePath, $keyData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("保存密钥失败: " . $e->getMessage());
         }
     }
@@ -326,7 +331,7 @@ class KeyManagementService implements KeyManagementInterface
             
             // 导入密钥
             return $this->importKey($keyData, $format);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("加载密钥失败: " . $e->getMessage());
         }
     }
@@ -357,13 +362,14 @@ class KeyManagementService implements KeyManagementInterface
      *
      * @param string $filename 文件名
      * @return bool 是否删除成功
+     * @throws CryptoException
      */
     public function deleteKey(string $filename): bool
     {
         try {
             $filePath = $this->keyStorePath . DIRECTORY_SEPARATOR . $filename;
             return FileHelper::secureDelete($filePath);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw CryptoException::fileOperationError("删除密钥失败: " . $e->getMessage());
         }
     }

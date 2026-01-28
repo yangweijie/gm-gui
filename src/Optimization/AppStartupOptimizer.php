@@ -2,6 +2,8 @@
 
 namespace Yangweijie\GmGui\Optimization;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Yangweijie\GmGui\Application\SmCryptoApp;
 
 class AppStartupOptimizer
@@ -145,9 +147,9 @@ class AppStartupOptimizer
      */
     protected function scanDirForClasses(string $dir, array &$classMap, string $appRoot): void
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::LEAVES_ONLY
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::LEAVES_ONLY
         );
         
         $phpFiles = new \RegexIterator($iterator, '/\.php$/', \RegexIterator::GET_MATCH);
